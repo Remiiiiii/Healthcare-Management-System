@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -7,7 +8,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Control, UseControllerReturn } from "react-hook-form";
+import { Control } from "react-hook-form";
+import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import { FormFieldType } from "./forms/PatientForm";
 import { Input } from "@/components/ui/input";
@@ -15,7 +17,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
 interface CustomProps {
-  control: Control<any>; // Replace 'any' with a more specific type if needed (e.g., your form data type)
+  control: Control<any>;
   fieldType: FormFieldType;
   name: string;
   label?: string;
@@ -26,26 +28,18 @@ interface CustomProps {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
-  renderSkeleton?: (field: UseControllerReturn) => React.ReactNode;
+  renderSkeleton?: (field: any) => React.ReactNode;
 }
 
-const RenderField = ({
-  field,
-  props,
-}: {
-  field: UseControllerReturn;
-  props: CustomProps;
-}) => {
-  const { fieldType, iconSrc, iconAlt, placeholder } = props;
-
-  switch (fieldType) {
+const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+  switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
-          {iconSrc && (
+          {props.iconSrc && (
             <Image
-              src={iconSrc}
-              alt={iconAlt || "icon"}
+              src={props.iconSrc}
+              alt={props.iconAlt || "icon"}
               width={24}
               height={24}
               className="ml-2"
@@ -53,7 +47,7 @@ const RenderField = ({
           )}
           <FormControl>
             <Input
-              placeholder={placeholder}
+              placeholder={props.placeholder}
               {...field}
               className="shad-input border-0"
             />
@@ -65,7 +59,7 @@ const RenderField = ({
         <FormControl>
           <PhoneInput
             defaultCountry="US"
-            placeholder={placeholder}
+            placeholder={props.placeholder}
             international
             withCountryCallingCode
             value={field.value as E164Number | undefined}
@@ -91,7 +85,7 @@ const CustomFormField = (props: CustomProps) => {
             <FormLabel>{label}</FormLabel>
           )}
 
-          <RenderField field={field} props={props} />
+          <RenderInput field={field} props={props} />
           <FormMessage className="shad-error" />
         </FormItem>
       )}
