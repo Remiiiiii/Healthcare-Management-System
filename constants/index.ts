@@ -54,7 +54,7 @@ export const Doctors = [
     name: "David Livingston",
   },
   {
-    image: "/assets/images/dr-peter.png",
+    image: "/assets/images/dr-wu.png",
     name: "Evan Wu",
   },
   {
@@ -62,7 +62,7 @@ export const Doctors = [
     name: "Johnathan Powell",
   },
   {
-    image: "/assets/images/dr-remirez.png",
+    image: "/assets/images/dr-ramirez.png",
     name: "Alex Ramirez",
   },
   {
