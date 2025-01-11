@@ -1,33 +1,42 @@
-import PatientForm from "@/components/forms/PatientForm";
-import { Link } from "lucide-react";
+import AppointmentForm from "@/components/forms/AppointmentForm";
+import { getPatient } from "@/lib/actions/patient.actions";
 import Image from "next/image";
 
-export default function NewAppointment() {
+const NewAppointment = async ({ params }: { params: { userId: string } }) => {
+  const { userId } = await params;
+  const patient = await getPatient(userId);
+
   return (
     <div className="flex h-screen max-h-screen">
-      {/* TODO: OTP Verification | Passkey Modal*/}
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[860px] flex-1 justify-between">
           <Image
             src="/assets/icons/logo-ks.png"
             height={1000}
             width={1000}
-            alt="patient"
-            className="mb-12 h-[150px] w-[250px]"
+            alt="logo"
+            className="mb-12 h-[150px] w-[250px] ml-[-25px]"
           />
-          {/* <PatientForm /> */}
-          <p className="justify-items-end text-dark-600 xl:text-left">
-            © 2025 KareSphere
-          </p>
+
+          <AppointmentForm
+            type="create"
+            userId={userId}
+            patientId={patient?.$id || ""}
+          />
+
+          <p className="copyright mt-10 py-12">© 2025 KareSphere</p>
         </div>
       </section>
+
       <Image
         src="/assets/images/appointment-img.png"
         height={1000}
         width={1000}
-        alt="patient"
-        className="side-img max-w-[50%]"
+        alt="appointment"
+        className="side-img max-w-[40%] bg-bottom"
       />
     </div>
   );
-}
+};
+
+export default NewAppointment;
