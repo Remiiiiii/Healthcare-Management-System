@@ -24,7 +24,7 @@ const Success = async ({
             height={1000}
             width={1000}
             alt="logo"
-            className="h-[150px] w-[250px]"
+            className="h-[50px] w-[200px]"
           />
         </Link>
         <section className="flex flex-col items-center">
@@ -33,7 +33,6 @@ const Success = async ({
             height={100}
             width={100}
             alt="success"
-            className="mt-[-50px] pb-10"
           />
 
           <h2 className="header mb-6 max-w-[600px] text-center">

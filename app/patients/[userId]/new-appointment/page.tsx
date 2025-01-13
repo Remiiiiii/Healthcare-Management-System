@@ -15,7 +15,7 @@ const NewAppointment = async ({ params }: { params: { userId: string } }) => {
             height={1000}
             width={1000}
             alt="logo"
-            className="mb-12 h-[150px] w-[250px] ml-[-25px]"
+            className="mb-12 h-[50px] w-[200px] ml-[-5px]"
           />
 
           <AppointmentForm
