@@ -6,11 +6,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl } from "@/components/ui/form";
 import SubmitButton from "@/components/SubmitButton";
-import CustomFormField from "../CustomFormField";
+import CustomFormCreation from "../CustomFormCreation";
 import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { registerPatient } from "@/lib/actions/patient.actions";
-import { FormFieldType } from "./PatientForm";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import {
   GenderOptions,
@@ -23,7 +22,16 @@ import { SelectItem } from "../ui/select";
 import Image from "next/image";
 import FileUploader from "../FileUploader";
 
-export const RegisterForm = ({ user }: { user: User }) => {
+export enum FormFieldType {
+  INPUT = "input",
+  TEXTAREA = "textarea",
+  PHONE_INPUT = "phoneInput",
+  CHECKBOX = "checkbox",
+  DATE_PICKER = "datePicker",
+  SELECT = "select",
+  SKELETON = "skeleton",
+}
+const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,17 +39,17 @@ export const RegisterForm = ({ user }: { user: User }) => {
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
-      name: "",
-      email: "",
-      phone: "",
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
+    // Store file info in form data as
     let formData;
-
     if (
       values.identificationDocument &&
       values.identificationDocument?.length > 0
@@ -49,21 +57,42 @@ export const RegisterForm = ({ user }: { user: User }) => {
       const blobFile = new Blob([values.identificationDocument[0]], {
         type: values.identificationDocument[0].type,
       });
+
       formData = new FormData();
-      formData.append("blob", blobFile);
+      formData.append("blobFile", blobFile);
       formData.append("fileName", values.identificationDocument[0].name);
     }
 
     try {
-      const patientData = {
-        ...values,
+      const patient = {
         userId: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
         birthDate: new Date(values.birthDate),
-        identificationDocument: formData,
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        insuranceProvider: values.insuranceProvider,
+        insurancePolicyNumber: values.insurancePolicyNumber,
+        allergies: values.allergies,
+        currentMedication: values.currentMedication,
+        familyMedicalHistory: values.familyMedicalHistory,
+        pastMedicalHistory: values.pastMedicalHistory,
+        identificationType: values.identificationType,
+        identificationNumber: values.identificationNumber,
+        identificationDocument: values.identificationDocument
+          ? formData
+          : undefined,
+        privacyConsent: values.privacyConsent,
       };
-      // @ts-expect-error {{expected, but got 'undefined'}}>
-      const patient = await registerPatient(patientData);
-      if (patient) {
+
+      const newPatient = await registerPatient(patient);
+
+      if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       }
     } catch (error) {
@@ -89,7 +118,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
           </div>
         </section>
 
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
@@ -99,7 +128,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
           iconAlt="user"
         />
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="email"
@@ -108,7 +137,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
             iconSrc="/assets/icons/email.svg"
             iconAlt="email"
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.PHONE_INPUT}
             control={form.control}
             name="phone"
@@ -117,13 +146,13 @@ export const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.DATE_PICKER}
             control={form.control}
             name="birthdate"
             label="DOB"
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.SKELETON}
             control={form.control}
             name="gender"
@@ -149,7 +178,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="address"
@@ -158,7 +187,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
             iconSrc="/assets/icons/email.svg"
             iconAlt="email"
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="occupation"
@@ -169,14 +198,14 @@ export const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="emergencyContactName"
             label="Emergency Contact"
             placeholder="Name of emergency contact"
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.PHONE_INPUT}
             control={form.control}
             name="emergencyContactNumber"
@@ -190,7 +219,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
           </div>
         </section>
         {/* TODO Have admin dynamically add new doctors */}
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.SELECT}
           control={form.control}
           name="primaryPhysician"
@@ -211,16 +240,16 @@ export const RegisterForm = ({ user }: { user: User }) => {
               </div>
             </SelectItem>
           ))}
-        </CustomFormField>
+        </CustomFormCreation>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="insuranceProvider"
             label="Insurance Provider"
             placeholder="Humana"
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="insurancePolicyNumber"
@@ -229,14 +258,14 @@ export const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="allergies"
             label="Allergies"
             placeholder="Pollen, Peanuts, Animals..."
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="currentMedication"
@@ -245,14 +274,14 @@ export const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="familyMedicalHistory"
-            label="Family Midical History"
+            label="Family Medical History"
             placeholder="Family member (name) suffers from high blood preasure..."
           />
-          <CustomFormField
+          <CustomFormCreation
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="pastMedicalHistory"
@@ -265,7 +294,7 @@ export const RegisterForm = ({ user }: { user: User }) => {
             <h2 className="sub-header">Identification & Verification</h2>
           </div>
         </section>
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.SELECT}
           control={form.control}
           name="identificationType"
@@ -277,15 +306,15 @@ export const RegisterForm = ({ user }: { user: User }) => {
               {type}
             </SelectItem>
           ))}
-        </CustomFormField>
-        <CustomFormField
+        </CustomFormCreation>
+        <CustomFormCreation
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="identificationNumber"
           label="Identification Number"
           placeholder="KS123456789"
         />
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.SKELETON}
           control={form.control}
           name="identificationDocument"
@@ -301,19 +330,19 @@ export const RegisterForm = ({ user }: { user: User }) => {
             <h2 className="sub-header">Consent & Privacy</h2>
           </div>
         </section>
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.CHECKBOX}
           control={form.control}
           name="treatmentConsent"
           label="I consent to treatment and understand the risks involved"
         />
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.CHECKBOX}
           control={form.control}
           name="disclosureConsent"
           label="I agree to the sharing of my personal information."
         />
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.CHECKBOX}
           control={form.control}
           name="privacyConsent"

@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import { Form } from "@/components/ui/form";
-import SubmitButton from "@/components/SubmitButton";
-import CustomFormField from "../CustomFormField";
-import { UserFormValidation } from "@/lib/validation";
-import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
+import { UserFormValidation } from "@/lib/validation";
+
+import "react-phone-number-input/style.css";
+import CustomFormCreation from "../CustomFormCreation";
+import SubmitButton from "../SubmitButton";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -20,7 +23,6 @@ export enum FormFieldType {
   SELECT = "select",
   SKELETON = "skeleton",
 }
-
 export const PatientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +69,7 @@ export const PatientForm = () => {
           <p className="text-dark-700">Schedule your first appointment</p>
         </section>
 
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
@@ -76,7 +78,7 @@ export const PatientForm = () => {
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="email"
@@ -85,7 +87,7 @@ export const PatientForm = () => {
           iconSrc="/assets/icons/email.svg"
           iconAlt="email"
         />
-        <CustomFormField
+        <CustomFormCreation
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
@@ -97,5 +99,3 @@ export const PatientForm = () => {
     </Form>
   );
 };
-
-export default PatientForm;

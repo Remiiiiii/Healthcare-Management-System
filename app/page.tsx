@@ -1,11 +1,10 @@
-import PatientForm from "@/components/forms/PatientForm";
+import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import Link from "next/link";
 import Image from "next/image";
 
-const Home = async ({ searchParams }: SearchParamProps) => {
-  const params = await searchParams;
-  const isAdmin = params?.admin === "true";
+const Home = ({ searchParams }: SearchParamProps) => {
+  const isAdmin = searchParams?.admin === "true";
   return (
     <div className="flex h-screen max-h-screen">
       {isAdmin && <PasskeyModal />}
@@ -16,7 +15,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
             height={1000}
             width={1000}
             alt="patient"
-            className="mb-12 h-[150px] w-[250px] ml-[-25px]"
+            className="mb-12 h-[50px] w-[200px] ml-[-5px]"
           />
           <PatientForm />
           <div className="text-14-regular mt-20 flex justify-between">
