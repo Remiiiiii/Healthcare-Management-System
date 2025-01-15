@@ -5,8 +5,9 @@ import {
   APPOINTMENT_COLLECTION_ID,
   database,
   DATABASE_ID,
+  messaging,
 } from "../appwrite.config";
-import { parseStringify } from "../utils";
+import { formatDateTime, parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite.types";
 import { revalidatePath } from "next/cache";
 
@@ -81,10 +82,10 @@ export const getRecentAppointmentList = async () => {
 
 export const updateAppointment = async ({
   appointmentId,
-  // userId,
+  userId,
   appointment,
-}: // type,
-UpdateAppointmentParams) => {
+  type,
+}: UpdateAppointmentParams) => {
   try {
     const updatedAppointment = await database.updateDocument(
       DATABASE_ID!,
@@ -97,10 +98,39 @@ UpdateAppointmentParams) => {
       throw new Error("Appointment not found");
     }
 
-    // TODO SMS notification
+    const smsMessage = `
+    Hello there! It's Remy with KareSphere. 
+    ${
+      type === "schedule"
+        ? `Your appointment has been successfully scheduled for ${
+            formatDateTime(appointment.schedule!).dateTime
+          } with Dr.${appointment.primaryPhysician}.`
+        : `We're sorry to inform you that your appointment on ${
+            formatDateTime(appointment.schedule!).dateTime
+          } has been cancelled for the following  reason: ${
+            appointment.cancellationReason
+          }`
+    }
+    `;
+
+    await sendSMSNotification(userId, smsMessage);
 
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const sendSMSNotification = async (userId: string, content: string) => {
+  try {
+    const message = await messaging.createSms(
+      ID.unique(),
+      content,
+      [],
+      [userId]
+    );
+    return parseStringify(message);
   } catch (error) {
     console.log(error);
   }

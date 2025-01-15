@@ -1,12 +1,17 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 import Link from "next/link";
 import Image from "next/image";
 
-const Home = ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams?.admin === "true";
+const Home = () => {
+  const searchParams = useSearchParams();
+  const isAdmin = searchParams?.get("admin") === "true";
+
   return (
-    <div className="flex h-screen max-h-screen">
+    <div className="flex h-screen max-h-screens">
       {isAdmin && <PasskeyModal />}
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
@@ -33,7 +38,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
         height={1000}
         width={1000}
         alt="patient"
-        className="side-img max-w-[50%]"
+        className="hidden object-contain h-50 w-50 md:block max-w-[50%] mt-[10%]"
       />
     </div>
   );

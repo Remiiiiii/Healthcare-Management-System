@@ -96,6 +96,7 @@ const AppointmentForm = ({
             cancellationReason: values?.cancellationReason,
             status: status as Status,
           },
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           type,
         };
 
