@@ -10,9 +10,12 @@ type FileUploaderProps = {
   onChange: (files: File[]) => void;
 };
 export const FileUploader = ({ files, onChange }: FileUploaderProps) => {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    onChange(acceptedFiles);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      onChange(acceptedFiles);
+    },
+    [onChange]
+  );
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
