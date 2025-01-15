@@ -38,7 +38,7 @@ const Home = () => {
         height={1000}
         width={1000}
         alt="patient"
-        className="max-w-[45%] h-[75%] mt-[15%] mr-[80px]"
+        className="hidden object-contain h-50 w-50 md:block max-w-[50%] mt-[10%]"
       />
     </div>
   );
