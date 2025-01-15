@@ -109,7 +109,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         className="space-y-12 flex-1"
       >
         <section className="space-y-4">
-          <h1 className="header">Welcome</h1>
+          <h1 className="header">Welcome {user.name}</h1>
           <p className="text-dark-700">Tell us a little bit about yourself.</p>
         </section>
         <section className="space-y-6">
@@ -184,8 +184,6 @@ const RegisterForm = ({ user }: { user: User }) => {
             name="address"
             label="Address"
             placeholder="1234 Yellow Brick Rd., Kansas"
-            iconSrc="/assets/icons/email.svg"
-            iconAlt="email"
           />
           <CustomFormCreation
             fieldType={FormFieldType.INPUT}
@@ -193,8 +191,6 @@ const RegisterForm = ({ user }: { user: User }) => {
             name="occupation"
             label="Occupation"
             placeholder="Software Engineer"
-            iconSrc="/assets/icons/email.svg"
-            iconAlt="email"
           />
         </div>
         <div className="flex flex-col gap-6 xl:flex-row">

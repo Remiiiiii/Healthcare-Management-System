@@ -62,9 +62,10 @@ export const PatientForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
         <section className="mb-12 space-y-4">
-          <h1 className="header">
-            Hi, welcome to KareSphere. Your one stop for healthcare appointment
-            services.
+          <h1 className="text-3xl font-bold">Hi, welcome to</h1>
+          <h1 className="text-green-500 text-6xl font-bold">KareSphere</h1>
+          <h1 className="text-2xl font-bold">
+            Your one stop for healthcare appointment services
           </h1>
           <p className="text-dark-700">Schedule your first appointment</p>
         </section>
