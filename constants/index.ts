@@ -40,42 +40,63 @@ export const IdentificationTypes = [
   "Voter ID Card",
 ];
 
+export const Specialty = {
+  cardiology: "Cardiology",
+  neurology: "Neurology",
+  oncology: "Oncology",
+  psychiatry: "Psychiatry",
+  gastroenterology: "Gastroenterology",
+  generalist: "Generalist",
+  dermatology: "Dermatology",
+  ophthalmology: "Ophthalmology",
+  gynecology: "Gynecology",
+  psychology: "Psychology",
+};
 export const Doctors = [
   {
     image: "/assets/images/dr-green.png",
-    name: "Patricia Green - Cardiologist",
+    name: "Patricia Green",
+    specialty: Specialty.generalist,
   },
   {
     image: "/assets/images/dr-cameron.png",
-    name: "Leila Cameron - Pediatrician ",
+    name: "Leila Cameron",
+    specialty: Specialty.neurology,
   },
   {
     image: "/assets/images/dr-livingston.png",
-    name: "David Livingston - Orthopedic Surgeon",
+    name: "David Livingston",
+    specialty: Specialty.oncology,
   },
   {
     image: "/assets/images/dr-wu.png",
-    name: "Evan Wu - Neurologist ",
+    name: "Evan Wu",
+    specialty: Specialty.psychiatry,
   },
   {
     image: "/assets/images/dr-powell.png",
-    name: "Johnathan Powell - Ophthalmologist ",
+    name: "Johnathan Powell",
+    specialty: Specialty.gastroenterology,
   },
   {
     image: "/assets/images/dr-ramirez.png",
-    name: "Alex Ramirez - Dermatologist ",
+    name: "Alex Ramirez",
+    specialty: Specialty.generalist,
   },
   {
     image: "/assets/images/dr-lee.png",
-    name: "Jasmine Lee - Pediatrician ",
+    name: "Jasmine Lee",
+    specialty: Specialty.dermatology,
   },
   {
     image: "/assets/images/dr-cruz.png",
-    name: "Alyana Cruz - Gynecologist ",
+    name: "Alyana Cruz",
+    specialty: Specialty.ophthalmology,
   },
   {
     image: "/assets/images/dr-sharma.png",
-    name: "Jiya Sharma - Neurologist",
+    name: "Jiya Sharma",
+    specialty: Specialty.gynecology,
   },
 ];
 
